@@ -1,0 +1,1 @@
+<view class="content"><image class="top_image" src="{{markers[0].iconPath}}"></image><view class="_div">{{markers[0].iconPath+''}}</view></view>

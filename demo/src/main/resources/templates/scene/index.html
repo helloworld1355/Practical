@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>index</title>
+    <link th:href="@{/style/node_modules/layui/dist/css/layui.css}" rel="stylesheet">
+    <script th:src="@{/style/node_modules/layui/dist/layui.js}" ></script>
+    <script th:src="@{/style/node_modules/jquery/dist/jquery.js}"></script>
+
+</head>
+<body>
+<form class="layui-form layui-row layui-col-space16">
+    <div class="layui-col-md3">
+        <div class="layui-input-wrap">
+            <div class="layui-input-prefix">
+                <i class="layui-icon layui-icon-search"></i>
+            </div>
+            <input type="text" id="address" value="" placeholder="景点地址" class="layui-input" lay-affix="clear">
+        </div>
+    </div>
+    <div class="layui-col-md3">
+        <div class="layui-input-wrap">
+            <div class="layui-input-prefix">
+                <i class="layui-icon layui-icon-search"></i>
+            </div>
+            <input type="text" id="audio" placeholder="音频" lay-affix="clear" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-col-md3">
+        <div class="layui-input-wrap">
+            <div class="layui-input-prefix">
+                <i class="layui-icon layui-icon-search"></i>
+            </div>
+            <input type="text" id="content" placeholder="内容" lay-affix="clear" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-btn-container layui-col-md3">
+        <button id="search-input" class="layui-btn"  lay-submit lay-filter="demo-table-search">查询</button>
+        <button type="reset" class="layui-btn layui-btn-primary">清空搜索框</button>
+
+    </div>
+</form>
+<table class="layui-hide" id="ID-table-demo-search">
+
+
+</table>
+<script type="text/html" id="barTable">
+
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+
+</script>
+
+<script th:inline="none">
+    layui.use(['table', 'form', 'layer'],function(){
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form
+        var table = layui.table;
+        // 创建表格实例
+        table.render({
+            elem: '#ID-table-demo-search'
+            ,url: '/scene/getAll' ,// 此处为静态模拟数据，实际使用时需换成真实接口
+            defaultToolbar: ['filter', 'exports', 'print', {
+                title: '提示',
+                layEvent: 'LAYTABLE_TIPS',
+                icon: 'layui-icon-tips'
+            }]
+            ,cols: [[
+                {checkbox: true, fixed: true}
+                ,{field:'id', title: 'ID', width:50}
+                ,{field:'radius', title: '范围(米)',width: 50}
+                ,{field:'address', title: '地址', width:300}
+                ,{field:'audio', title: '音频地址', width:300}
+                ,{field:'content', title: '内容', width:400}
+                // ,{fixed: 'right', title: '操作', toolbar: '#barTable', width: 120}
+            ]]
+            ,page: false
+            ,limit:20
+            ,limits:[20,50,100,150]
+            ,id:'ID-table-demo-search'
+        });
+        //搜索
+        $('#search-input').click(function (){
+            var address=$('#address').val();
+            var audio=$('#audio').val();
+            var content=$('#content').val();
+            var index = layer.msg('查询中，请稍后...', {
+                icon: 16,
+                time: false,
+                shade: 0
+            })
+            setTimeout(function (){
+                table.reload('ID-table-demo-search',{
+                    url:'/scene/search',
+                    method:'get',
+                    where:{
+                        address:address,
+                        audio:audio,
+                        content:content
+                    },
+
+                })
+                layer.close(index)
+            })
+            return false;
+        })//搜索结束
+
+        // //添加信息开始
+        // $('#create').click(function (){
+        //     console.log("用户点击了添加按钮");
+        //     layer.open({
+        //         type: 2,
+        //         area: ['500','800'],
+        //         resize: true,
+        //         shadeClose: true,
+        //         title: '编辑',
+        //         content: '/scene/form?id=0',
+        //     });
+        //     return false;
+        //     // $('#search-input').click();
+        //
+        // });
+        // //添加信息结束
+
+        // 弹出form表单
+        // table.on('tool(ID-table-demo-search)',function (obj){
+        //     var data=obj.data;
+        //     console.log(data);
+        //    if(obj.event ==='edit'){
+        //        console.log("进入编辑")
+        //        var id = data.id; // 获取选中行的 id
+        //        console.log(id);
+        //        layer.open({
+        //            type: 2,
+        //            area: ['60%','80%'],
+        //            resize: true,
+        //            shadeClose: true,
+        //            title: '编辑',
+        //            content: '/scene/form?id=' + id,
+        //        })
+        //    }else if(obj.event==='del'){
+        //        var id=data.id;
+        //        console.log("进入删除，id="+id);
+        //        layer.open({
+        //            type:0,
+        //            area:'auto',
+        //            resize:true,
+        //            shadeClose:true,
+        //            title:'提示',
+        //            content:'确认是否删除',
+        //            btn:['确认','取消'],
+        //            yes:function (index){
+        //                console.log("点击了确认");
+        //                $.post('/scene/del',{id:id},function (res){
+        //                    console.log("删除成功！res="+res);
+        //                },'json');
+        //                $('#search-input').click();
+        //                layer.close(index);
+        //
+        //            },
+        //            cancel:function (index){
+        //                console.log("用户点击了取消");
+        //                layer.close(index);
+        //            }
+        //        })
+        //    }
+        //
+        // });
+        //弹出层结束
+
+
+    });//lay.use结束
+</script>
+
+</body>
+</html>
