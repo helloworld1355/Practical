@@ -18,7 +18,7 @@
     }
   },
   "compileType": "miniprogram",
-  "libVersion": "3.0.0",
+  "libVersion": "3.0.1",
   "appid": "wx9fb4d709b81b4eda",
   "projectname": "实训",
   "condition": {},

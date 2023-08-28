@@ -23,9 +23,7 @@
           tester
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="javascript:;">Your Profile</a></dd>
-          <dd><a href="javascript:;">Settings</a></dd>
-          <dd><a href="javascript:;">Sign out</a></dd>
+          <a id="singout"><dd>Sign out</dd></a>
         </dl>
       </li>
       <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -95,7 +93,7 @@
     var element = layui.element;
     var layer = layui.layer;
     var util = layui.util;
-    var $ = layui.$;
+    var $ = layui.jquery;
     //头部事件
     util.event('lay-header-event', {
       menuLeft: function(othis){ // 左侧菜单事件
@@ -113,6 +111,20 @@
           ,scrollbar: false
         });
       }
+    });
+
+    });
+  $('#singout').click(function (){
+    $.ajax({
+      type: 'GET',
+      url:'/user/singout',
+      success:function (){
+        console.log("注销成功");
+        setTimeout(function (){
+          layer.msg("注销成功！");
+        },1000)
+        window.location.href="/user/login";
+      },
     });
   });
 </script>

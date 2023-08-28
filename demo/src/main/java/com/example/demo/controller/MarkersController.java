@@ -7,7 +7,6 @@ import com.example.demo.service.impl.MarkersServiceImpl;
 import com.example.demo.service.impl.SceneServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.relational.core.sql.In;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
@@ -34,6 +33,12 @@ public class MarkersController {
 
     @Value("${host-path}")
     private String hostPath;
+
+    @Value("${image-height}")
+    private double imageHeight;
+
+    @Value("${image-width}")
+    private double imageWidth;
 
 
     @GetMapping("/getAll")
@@ -74,35 +79,25 @@ public class MarkersController {
                                         double radius,String audio,String imgPath,String latitude,String longitude){
         System.out.println("进入submit");
         CommonResult<Boolean> rs=new CommonResult<>();
-        try {
-            InetAddress localHost = InetAddress.getLocalHost();
-            String ipAddress = localHost.getHostAddress();
-            System.out.println("Local IP Address: " + ipAddress);
-            audio=hostPath+"/audio/"+audio;
-            imgPath=hostPath+"/img/"+imgPath;
-            Markers markers=new Markers();
-            markers.setId(id);
-            markers.setTitle(title);
-            markers.setIconPath(imgPath);
-            markers.setLatitude(latitude);
-            markers.setLongitude(longitude);
-            markers.setHeight(30);
-            markers.setWidth(40);
-            service.saveEntity(markers);
-            Scene scene=new Scene();
-            scene.setId(id);
-            scene.setAudio(audio);
-            scene.setRadius(radius);
-            scene.setContent(content);
-            scene.setAddress(address);
-            sceneService.saveEntity(scene);
+        audio=hostPath+"/audio/"+audio;
+        imgPath=hostPath+"/img/"+imgPath;
+        Markers markers=new Markers();
+        markers.setId(id);
+        markers.setTitle(title);
+        markers.setIconPath(imgPath);
+        markers.setLatitude(latitude);
+        markers.setLongitude(longitude);
+        markers.setHeight(imageHeight);
+        markers.setWidth(imageWidth);
+        rs=service.saveEntity(markers);
+        Scene scene=new Scene();
+        scene.setId(id);
+        scene.setAudio(audio);
+        scene.setRadius(radius);
+        scene.setContent(content);
+        scene.setAddress(address);
+        sceneService.saveEntity(scene);
 
-            return rs;
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-            rs.setCode(-1);
-            rs.setMsg(e.getMessage());
-        }
         return rs;
     }
 

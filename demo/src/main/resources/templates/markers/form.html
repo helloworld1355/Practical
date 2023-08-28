@@ -8,7 +8,7 @@
     <script th:src="@{/style/node_modules/jquery/dist/jquery.js}"></script>
 </head>
 <body style="padding: 20px">
-<form class="layui-form" id="myform">
+<form class="layui-form model-form" id="myform">
 <!--    id-->
     <input name="id" type="hidden" th:value="${markers.id}">
 <!--    景点名称-->
@@ -75,7 +75,7 @@
     <hr style="margin: 21px 0;">
 <!--    底部按钮-->
     <div style="text-align: center;">
-        <button lay-submit lay-filter="confirm" class="layui-btn layui-col-md6" style="margin-right: 15%">确认</button>
+        <button type="button" lay-submit="" lay-filter="save" class="layui-btn layui-col-md6" style="margin-right: 15%">确认</button>
         <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 
     </div>
@@ -91,7 +91,7 @@
             var layer = layui.layer;
             var element = layui.element;
             var form =layui.form;
-            var $ = layui.$;
+            var $ = layui.jquery;
 
             // 单图片上传
             var uploadInst = upload.render({
@@ -108,7 +108,7 @@
                 },
                 done: function(res){
                     // 若上传失败
-                    if(res.code > 0){
+                    if(res.code < 0){
                         return layer.msg('上传失败');
                     }
                     // 上传成功的一些操作
@@ -127,7 +127,7 @@
                 // 进度条
                 progress: function(n, elem, e){
                     element.progress('filter-demo', n + '%'); // 可配合 layui 进度条元素使用
-                    if(n == 100){
+                    if(n === 100){
                         layer.msg('上传完毕', {icon: 1});
                     }
                 }
@@ -139,7 +139,13 @@
                 elem: '.demo-class-accept', // 绑定多个元素
                 url: '/upload/audio', // 此处配置你自己的上传接口即可
                 accept: 'audio', // 音频
+                before:function (){
+                    layer.msg('上传中', {icon: 16, time: 0});
+                },
                 done:function (res){
+                    if(res.code<0){
+                        return layer.msg('上传失败');
+                    }
                     audio=res.data;
                     layer.msg('上传成功');
                     console.log(res);
@@ -180,9 +186,13 @@
 
 
             //form表单提交
-            form.on('submit(confirm)',function (data){
+            var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+            parent.layer.iframeAuto(index);
+            form.on('submit(save)',function (data){
                 console.log("进入表单提交");
                 var field=data.field;
+                var loadIndex = layer.load(2);
+                console.log(JSON.stringify(data.field));
                 $.ajax({
                     type:'POST',
                     url:'/markers/submit',
@@ -198,23 +208,33 @@
                         longitude:longitude,
                     },
                     dataType:'json',
+                    beforeSend:function (){
+                      console.log("准备开始！");
+                    },
                     success:function (res){
-                        // parent.layer.close(loadingIndex);
-                        var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-                        parent.layer.iframeAuto(index);
-                        parent.layer.close(index);
-                        parent.$('#search-input').click();
-                        // console.log("关闭");
+                        layer.close(loadIndex);
+                        if(res.code===0){
+                            $('#search-input',parent.document).click();
+                            parent.layer.msg('refresh');
+                            parent.layer.close(index);
+                            return false;
+                        }else{
+                            layer.msg(res.msg, {
+                                icon: 2,
+                                anim: 6
+                            });
+                        }
+
                     },
                     error:function (res){
-                        // parent.layer.close(loadingIndex);
+                        parent.layer.close(loadingIndex);
                         var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
                         parent.layer.iframeAuto(index);
                         parent.layer.close(index);
                         layer.msg("发生错误："+res);
                         console.log("发生错误！"+res);
                     },
-                    done:function (){
+                    complete:function (){
                         console.log("关闭");
                     }
                 })

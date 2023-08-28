@@ -9455,9 +9455,9 @@ internalMixin(Vue);
 
 /***/ }),
 /* 26 */
-/*!******************************************!*\
-  !*** C:/a-project/hbiuldx/实训/pages.json ***!
-  \******************************************/
+/*!********************************************!*\
+  !*** C:/a-project/实训/实训-uniapp/pages.json ***!
+  \********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -9606,53 +9606,10 @@ function normalizeComponent (
 /* 36 */,
 /* 37 */,
 /* 38 */,
-/* 39 */,
-/* 40 */,
-/* 41 */,
-/* 42 */,
-/* 43 */,
-/* 44 */,
-/* 45 */
-/*!***************************************************!*\
-  !*** ./node_modules/inherits/inherits_browser.js ***!
-  \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      })
-    }
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      var TempCtor = function () {}
-      TempCtor.prototype = superCtor.prototype
-      ctor.prototype = new TempCtor()
-      ctor.prototype.constructor = ctor
-    }
-  }
-}
-
-
-/***/ }),
-/* 46 */
-/*!*********************************************!*\
-  !*** C:/a-project/hbiuldx/实训/utils/base.js ***!
-  \*********************************************/
+/* 39 */
+/*!***********************************************!*\
+  !*** C:/a-project/实训/实训-uniapp/utils/base.js ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -9664,12 +9621,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _default = {
-  host: 'http://43.138.14.156/'
+  host: 'http://localhost/'
 };
 exports.default = _default;
 
 /***/ }),
-/* 47 */
+/* 40 */
 /*!******************************************!*\
   !*** ./node_modules/hash.js/lib/hash.js ***!
   \******************************************/
@@ -9678,11 +9635,11 @@ exports.default = _default;
 
 var hash = exports;
 
-hash.utils = __webpack_require__(/*! ./hash/utils */ 48);
-hash.common = __webpack_require__(/*! ./hash/common */ 50);
-hash.sha = __webpack_require__(/*! ./hash/sha */ 51);
-hash.ripemd = __webpack_require__(/*! ./hash/ripemd */ 58);
-hash.hmac = __webpack_require__(/*! ./hash/hmac */ 59);
+hash.utils = __webpack_require__(/*! ./hash/utils */ 41);
+hash.common = __webpack_require__(/*! ./hash/common */ 44);
+hash.sha = __webpack_require__(/*! ./hash/sha */ 45);
+hash.ripemd = __webpack_require__(/*! ./hash/ripemd */ 52);
+hash.hmac = __webpack_require__(/*! ./hash/hmac */ 53);
 
 // Proxy hash functions to the main object
 hash.sha1 = hash.sha.sha1;
@@ -9694,7 +9651,7 @@ hash.ripemd160 = hash.ripemd.ripemd160;
 
 
 /***/ }),
-/* 48 */
+/* 41 */
 /*!************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/utils.js ***!
   \************************************************/
@@ -9704,8 +9661,8 @@ hash.ripemd160 = hash.ripemd.ripemd160;
 "use strict";
 
 
-var assert = __webpack_require__(/*! minimalistic-assert */ 49);
-var inherits = __webpack_require__(/*! inherits */ 45);
+var assert = __webpack_require__(/*! minimalistic-assert */ 42);
+var inherits = __webpack_require__(/*! inherits */ 43);
 
 exports.inherits = inherits;
 
@@ -9983,7 +9940,7 @@ exports.shr64_lo = shr64_lo;
 
 
 /***/ }),
-/* 49 */
+/* 42 */
 /*!***************************************************!*\
   !*** ./node_modules/minimalistic-assert/index.js ***!
   \***************************************************/
@@ -10004,7 +9961,44 @@ assert.equal = function assertEqual(l, r, msg) {
 
 
 /***/ }),
-/* 50 */
+/* 43 */
+/*!***************************************************!*\
+  !*** ./node_modules/inherits/inherits_browser.js ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    if (superCtor) {
+      ctor.super_ = superCtor
+      ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+          value: ctor,
+          enumerable: false,
+          writable: true,
+          configurable: true
+        }
+      })
+    }
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    if (superCtor) {
+      ctor.super_ = superCtor
+      var TempCtor = function () {}
+      TempCtor.prototype = superCtor.prototype
+      ctor.prototype = new TempCtor()
+      ctor.prototype.constructor = ctor
+    }
+  }
+}
+
+
+/***/ }),
+/* 44 */
 /*!*************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/common.js ***!
   \*************************************************/
@@ -10014,8 +10008,8 @@ assert.equal = function assertEqual(l, r, msg) {
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./utils */ 48);
-var assert = __webpack_require__(/*! minimalistic-assert */ 49);
+var utils = __webpack_require__(/*! ./utils */ 41);
+var assert = __webpack_require__(/*! minimalistic-assert */ 42);
 
 function BlockHash() {
   this.pending = null;
@@ -10107,7 +10101,7 @@ BlockHash.prototype._pad = function pad() {
 
 
 /***/ }),
-/* 51 */
+/* 45 */
 /*!**********************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha.js ***!
   \**********************************************/
@@ -10117,15 +10111,15 @@ BlockHash.prototype._pad = function pad() {
 "use strict";
 
 
-exports.sha1 = __webpack_require__(/*! ./sha/1 */ 52);
-exports.sha224 = __webpack_require__(/*! ./sha/224 */ 54);
-exports.sha256 = __webpack_require__(/*! ./sha/256 */ 55);
-exports.sha384 = __webpack_require__(/*! ./sha/384 */ 56);
-exports.sha512 = __webpack_require__(/*! ./sha/512 */ 57);
+exports.sha1 = __webpack_require__(/*! ./sha/1 */ 46);
+exports.sha224 = __webpack_require__(/*! ./sha/224 */ 48);
+exports.sha256 = __webpack_require__(/*! ./sha/256 */ 49);
+exports.sha384 = __webpack_require__(/*! ./sha/384 */ 50);
+exports.sha512 = __webpack_require__(/*! ./sha/512 */ 51);
 
 
 /***/ }),
-/* 52 */
+/* 46 */
 /*!************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha/1.js ***!
   \************************************************/
@@ -10135,9 +10129,9 @@ exports.sha512 = __webpack_require__(/*! ./sha/512 */ 57);
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ 48);
-var common = __webpack_require__(/*! ../common */ 50);
-var shaCommon = __webpack_require__(/*! ./common */ 53);
+var utils = __webpack_require__(/*! ../utils */ 41);
+var common = __webpack_require__(/*! ../common */ 44);
+var shaCommon = __webpack_require__(/*! ./common */ 47);
 
 var rotl32 = utils.rotl32;
 var sum32 = utils.sum32;
@@ -10210,7 +10204,7 @@ SHA1.prototype._digest = function digest(enc) {
 
 
 /***/ }),
-/* 53 */
+/* 47 */
 /*!*****************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha/common.js ***!
   \*****************************************************/
@@ -10220,7 +10214,7 @@ SHA1.prototype._digest = function digest(enc) {
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ 48);
+var utils = __webpack_require__(/*! ../utils */ 41);
 var rotr32 = utils.rotr32;
 
 function ft_1(s, x, y, z) {
@@ -10270,7 +10264,7 @@ exports.g1_256 = g1_256;
 
 
 /***/ }),
-/* 54 */
+/* 48 */
 /*!**************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha/224.js ***!
   \**************************************************/
@@ -10280,8 +10274,8 @@ exports.g1_256 = g1_256;
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ 48);
-var SHA256 = __webpack_require__(/*! ./256 */ 55);
+var utils = __webpack_require__(/*! ../utils */ 41);
+var SHA256 = __webpack_require__(/*! ./256 */ 49);
 
 function SHA224() {
   if (!(this instanceof SHA224))
@@ -10311,7 +10305,7 @@ SHA224.prototype._digest = function digest(enc) {
 
 
 /***/ }),
-/* 55 */
+/* 49 */
 /*!**************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha/256.js ***!
   \**************************************************/
@@ -10321,10 +10315,10 @@ SHA224.prototype._digest = function digest(enc) {
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ 48);
-var common = __webpack_require__(/*! ../common */ 50);
-var shaCommon = __webpack_require__(/*! ./common */ 53);
-var assert = __webpack_require__(/*! minimalistic-assert */ 49);
+var utils = __webpack_require__(/*! ../utils */ 41);
+var common = __webpack_require__(/*! ../common */ 44);
+var shaCommon = __webpack_require__(/*! ./common */ 47);
+var assert = __webpack_require__(/*! minimalistic-assert */ 42);
 
 var sum32 = utils.sum32;
 var sum32_4 = utils.sum32_4;
@@ -10427,7 +10421,7 @@ SHA256.prototype._digest = function digest(enc) {
 
 
 /***/ }),
-/* 56 */
+/* 50 */
 /*!**************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha/384.js ***!
   \**************************************************/
@@ -10437,9 +10431,9 @@ SHA256.prototype._digest = function digest(enc) {
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ 48);
+var utils = __webpack_require__(/*! ../utils */ 41);
 
-var SHA512 = __webpack_require__(/*! ./512 */ 57);
+var SHA512 = __webpack_require__(/*! ./512 */ 51);
 
 function SHA384() {
   if (!(this instanceof SHA384))
@@ -10473,7 +10467,7 @@ SHA384.prototype._digest = function digest(enc) {
 
 
 /***/ }),
-/* 57 */
+/* 51 */
 /*!**************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/sha/512.js ***!
   \**************************************************/
@@ -10483,9 +10477,9 @@ SHA384.prototype._digest = function digest(enc) {
 "use strict";
 
 
-var utils = __webpack_require__(/*! ../utils */ 48);
-var common = __webpack_require__(/*! ../common */ 50);
-var assert = __webpack_require__(/*! minimalistic-assert */ 49);
+var utils = __webpack_require__(/*! ../utils */ 41);
+var common = __webpack_require__(/*! ../common */ 44);
+var assert = __webpack_require__(/*! minimalistic-assert */ 42);
 
 var rotr64_hi = utils.rotr64_hi;
 var rotr64_lo = utils.rotr64_lo;
@@ -10814,7 +10808,7 @@ function g1_512_lo(xh, xl) {
 
 
 /***/ }),
-/* 58 */
+/* 52 */
 /*!*************************************************!*\
   !*** ./node_modules/hash.js/lib/hash/ripemd.js ***!
   \*************************************************/
@@ -10824,8 +10818,8 @@ function g1_512_lo(xh, xl) {
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./utils */ 48);
-var common = __webpack_require__(/*! ./common */ 50);
+var utils = __webpack_require__(/*! ./utils */ 41);
+var common = __webpack_require__(/*! ./common */ 44);
 
 var rotl32 = utils.rotl32;
 var sum32 = utils.sum32;
@@ -10971,7 +10965,7 @@ var sh = [
 
 
 /***/ }),
-/* 59 */
+/* 53 */
 /*!***********************************************!*\
   !*** ./node_modules/hash.js/lib/hash/hmac.js ***!
   \***********************************************/
@@ -10981,8 +10975,8 @@ var sh = [
 "use strict";
 
 
-var utils = __webpack_require__(/*! ./utils */ 48);
-var assert = __webpack_require__(/*! minimalistic-assert */ 49);
+var utils = __webpack_require__(/*! ./utils */ 41);
+var assert = __webpack_require__(/*! minimalistic-assert */ 42);
 
 function Hmac(hash, key, enc) {
   if (!(this instanceof Hmac))

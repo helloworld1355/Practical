@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.common.CommonResult;
 import com.example.demo.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -12,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-08-22
  */
 public interface IUserService extends IService<User> {
-
+    public CommonResult<User> login(String name,String password);
 }

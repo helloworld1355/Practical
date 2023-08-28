@@ -1,12 +1,15 @@
 <template>
 	<view class="content">
-		<image class="top_image" :src="markers[0].iconPath"></image>
-		<div >{{markers[0].iconPath}}	</div>
+		<image class="top_image" mode="aspectFill" :src="markers[0].iconPath"></image>
+		<hr class="hr1">
+		<view class="article" v-for="(item,index) in markers">
+			
+			<image class="art-image" :src="item.iconPath" ></image>
+			<text> {{scenes[index].content}} </text>
+			<hr style="margin-top: 10px;border-top: 2px dashed blue;" class="hr1">
 		</view>
-		<view class="article" v-for="(item,index) in scenes">
-			<view >{{item.content}}</view>
-		</view>
-	
+		<button @click="log">log-scenes</button>
+	</view>
 </template>
 
 <script>
@@ -91,25 +94,44 @@
 				  }
 				});
 				
+				
+				
+			},
+			log :function(){
+				console.log("scenes::",this.scenes);
 			},
 		}
 	}
 </script>
 
-<style lang="stylus">
+<style>
 .content{
-	height: auto;
-	// display: flex;
-	// background: #491942;
+	height: calc(100vh);
+	width: calc(100vh);
+	
 }
 .top_image{
-	width: calc(100vh);
-	height: calc(20vh);
-	margin-bottom: 30rpx;
+	width: calc(100);
+	height: 35%;
+	margin-bottom: 5px;
 }
 .article{
-	width: 100%;
+	width: calc(100);
 	height: 200rpx;
-	background: #401
+	padding: 10px 0;
+	display: flex;
+}
+hr1{
+	border: 0;
+	border-top: 2px dashed blue;
+}
+.art-image{
+	width: 20%;
+	height: 100%;
+	margin-right: 10px;
+}
+.art-text{
+	width: 80%;
+	height: 100%;
 }
 </style>

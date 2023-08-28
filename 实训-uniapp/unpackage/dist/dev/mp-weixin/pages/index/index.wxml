@@ -1,1 +1,0 @@
-<view class="content"><map id="map1" latitude="{{latitude}}" show-location="ture" longitude="{{longitude}}" markers="{{markers}}" scale="18" enable-satellite="{{true}}" show-compass="{{true}}"><button data-event-opts="{{[['tap',[['stopRadio',['$event']]]]]}}" class="floating-button" bindtap="__e">+</button></map></view>

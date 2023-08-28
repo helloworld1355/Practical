@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.example.demo.common.CommonResult;
+import com.example.demo.entity.User;
+import com.example.demo.service.impl.UserServiceImpl;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -15,14 +19,38 @@ import org.springframework.stereotype.Controller;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+    @Autowired
+    private UserServiceImpl userService;
+
+    @PostMapping( "/login")
+    @ResponseBody
+    public CommonResult<User> login(String username, String password, HttpSession session){
+        System.out.println(username + password);
+        CommonResult<User> rs = userService.login(username,password);
+        if(rs.getCode()==0){
+            session.setAttribute("user",rs.getData());
+        }
+        return rs;
+
+    }
     @GetMapping("/login")
-    public String login(){
+    public String lg(){
         return "login";
     }
 
     @GetMapping("/index")
     public String index(){
         return "index";
+    }
+
+    @GetMapping("/singout")
+    @ResponseBody
+    private CommonResult<Boolean> singout(HttpSession session){
+        CommonResult<Boolean> rs=new CommonResult<>();
+        session.removeAttribute("user");
+        rs.setMsg("删除成功！");
+        rs.setCode(0);
+        return rs;
     }
 
     @GetMapping("/markers")

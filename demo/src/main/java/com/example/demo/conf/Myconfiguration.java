@@ -3,9 +3,13 @@ package com.example.demo.conf;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import com.example.demo.entity.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,7 +24,25 @@ public class Myconfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //registry.addInterceptor()
+        registry.addInterceptor(new SessionHandlerInterceptor())
+                .addPathPatterns("/user/**")
+                .addPathPatterns("/markers/**")
+                .addPathPatterns("/scenes/**")
+                .excludePathPatterns("/user/login");
+    }
+
+    class SessionHandlerInterceptor implements HandlerInterceptor {
+        @Override
+        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+            System.out.println("session check");
+            User user = (User) request.getSession().getAttribute("user");
+            if(user==null){
+                // 如果没有登录，重定向到login.html
+                response.sendRedirect("/user/login");
+                return false;
+            }
+            return true;
+        }
     }
 
     @Override
@@ -45,5 +67,6 @@ public class Myconfiguration implements WebMvcConfigurer {
 //        interceptor.addInnerInterceptor(pageInterceptor);
 //        return interceptor;
 //    }
+
 
 }

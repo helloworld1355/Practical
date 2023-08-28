@@ -4,22 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link rel="stylesheet" th:href="@{../style/style.css}">
+    <link rel="stylesheet" href="/style/login/login.css">
+    <link href="//unpkg.com/layui@2.8.0/dist/css/layui.css" rel="stylesheet">
+    <script src="/style/node_modules/jquery/dist/jquery.js"></script>
+    <script th:src="@{/style/node_modules/layui/dist/layui.js}" ></script>
+
 </head>
-<body>
-<div class="login-container">
-    <h1>Admin Login</h1>
-    <form action="" method="POST">
-        <div class="input-container">
-            <label for="username">Username</label>
-            <input type="text" id="username" name="username" required>
+<body >
+<style>
+    .demo-login-container{width: 320px; margin: 21px auto 0;}
+    .demo-login-other .layui-icon{position: relative; display: inline-block; margin: 0 2px; top: 2px; font-size: 26px;}
+</style>
+<div class="login-wrapper layui-anim layui-anim-scale">
+    <form class="layui-form">
+        <h2>后台管理登陆</h2>
+        <div class="layui-form-item layui-input-icon-group">
+            <i class="layui-icon layui-icon-username"></i>
+            <input class="layui-input" id="username" name="username" placeholder="请输入登录账号" autocomplete="off"
+                   lay-verType="tips" lay-verify="required" required/>
         </div>
-        <div class="input-container">
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+        <div class="layui-form-item layui-input-icon-group">
+            <i class="layui-icon layui-icon-password"></i>
+            <input class="layui-input" id="pwd" name="password" placeholder="请输入登录密码" type="password"
+                   lay-verType="tips" lay-verify="required" required/>
         </div>
-        <button type="submit">Login</button>
+
+
+        <div class="layui-form-item">
+            <button class="layui-btn layui-btn-fluid" lay-filter="loginSubmit" lay-submit="">登录</button>
+        </div>
+
     </form>
 </div>
+<div class="login-copyright">基于定位的语音导游小程序后台管理系统</div>
+<script src="/plugin/layui/layui.js"></script>
+
+<script>
+    layui.use(['layer','form'],function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form
+        $('.login-wrapper').removeClass('layui-hide');
+
+
+        //登陆事件
+        form.on('submit(loginSubmit)',function(data){
+            console.log('login click');
+
+            // 设置按钮文字 禁止点击
+            $(data.elem).attr('disabled',true).text('登陆中....');
+            // 网络请求
+            var loadIndex = layer.load(2);
+            console.log(JSON.stringify(data.field));
+            $.ajax({
+                type:'POST',
+                url:"/user/login",
+                data:data.field,// 傳遞的數值
+                dataType:'json',
+                beforeSend:function(){
+                },
+                success:function(res){
+                    console.log(res);
+                    layer.close(loadIndex);
+                    if(res.code==0){
+                        $(data.elem).attr('disabled',true).text('登陆成功');
+                        layer.msg('登陆成功',{
+                            icon:1,
+                            time:1500
+                        });
+                        // 延迟3秒跳转到首页
+                        setTimeout(function (){
+                            window.location.href = "/user/index"
+                        },2000);
+                        return false;
+                    }else {
+                        layer.msg(res.msg,{
+                            icon:2,
+                            anim:6
+                        });
+                        setTimeout(function (){
+                            $(data.elem).text('登录').removeAttr('disabled');
+                        },1000);
+                    }
+                }
+            })
+            return false;
+        })
+
+    })
+</script>
 </body>
 </html>

@@ -45,12 +45,14 @@ public class MarkersServiceImpl extends ServiceImpl<MarkersMapper, Markers> impl
             rs.setCode(-1);
             rs.setMsg("无数据！");
         }
+        System.out.println("getAll=="+rs);
         return rs;
     }
 
     @Override
     @CacheEvict(value = "getMarkers",allEntries = true)
     public CommonResult<Boolean> saveEntity(Markers markers){
+        System.out.println("进入保存markers");
         CommonResult<Boolean> rs=new CommonResult<>();
         try{
             if(markers.getId()==0){
