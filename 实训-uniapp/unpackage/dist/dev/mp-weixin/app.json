@@ -1,6 +1,8 @@
 {
   "pages": [
-    "pages/test/test"
+    "pages/index/index",
+    "pages/test/list",
+    "pages/test/detail"
   ],
   "subPackages": [],
   "window": {
@@ -8,6 +10,20 @@
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "list": [
+      {
+        "iconPath": "static/3.1定位.png",
+        "pagePath": "pages/index/index",
+        "selectedIconPath": "static/done.png"
+      },
+      {
+        "iconPath": "static/列表选择.png",
+        "pagePath": "pages/test/list",
+        "selectedIconPath": "static/todo_list.png"
+      }
+    ]
   },
   "permission": {
     "scope.userLocation": {

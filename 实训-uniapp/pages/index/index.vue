@@ -2,10 +2,10 @@
 	<view class="content">
 		<map id="map1" :latitude="latitude"  show-location="ture" :longitude="longitude" :markers="markers" scale="18" 
 		enable-satellite show-compass>
-			<button class="floating-button" @click="stopRadio">
+			
 			    <!-- 这里可以放置按钮的内容，比如一个加号图标 -->
-			    +
-			  </button>
+			    <image class="floating-button" src="../../static/暂停.png" @click="stopRadio" >
+				</image>
 		</map>
 		
 	</view>
@@ -32,91 +32,53 @@ import base from '../../utils/base.js'
 			
 			
 			//持续监听用户位置
-			// uni.startLocationUpdate({
-			//   success: res => console.log('开启小程序接收位置消息成功'),
-			//   fail: err => console.error('开启小程序接收位置消息失败：', err),
-			//   complete: msg => console.log('调用开启小程序接收位置消息 API 完成')
-			// });
-			// uni.onLocationChange(function (res) {
-			// 	console.log('onload纬度：' + res.latitude);
-			// 	console.log('onload经度：' + res.longitude);
-			// 	that.latitude = res.latitude;
-			// 	that.longitude = res.longitude;
-			// });
+			uni.startLocationUpdate({
+			  success: res => console.log('开启小程序接收位置消息成功'),
+			  fail: err => console.error('开启小程序接收位置消息失败：', err),
+			  complete: msg => console.log('调用开启小程序接收位置消息 API 完成')
+			});
+			uni.onLocationChange(function (res) {
+				console.log('onload纬度：' + res.latitude);
+				console.log('onload经度：' + res.longitude);
+				that.latitude = res.latitude;
+				that.longitude = res.longitude;
+			});
 			
-			// // 获取当前用户坐标--无用
-			// uni.getLocation({
-			// 	type: 'gcj02',
-			// 	altitude:'true',
-			// 	isHighAccuracy:"true",
-			// 	accuracy:"best",
-			// 	success: function(res) {
-			// 		console.log("经度：" + res.longitude);
-			// 		console.log("纬度：" + res.latitude);
-			// 		that.latitude = res.latitude;
-			// 		that.longitude = res.longitude;
-			// 			uni.showModal({
-			// 				title:"经度：" + res.longitude+"纬度：" + res.latitude,
-			// 			})
-			// 		},false:function(res){
-			// 			uni.showModal({
-			// 				title:"false"
-			// 			})
-			// 		}
-			// });
-			
-			
+			//获取数据
 			this.check();
-			
-			// 获取数据库中的所有景点标记
-			// uni.request({
-			// 	url:base.host+'markers/getAll',
-			// 	success(res) {
-			// 		that.markers=res.data.data;
-			// 		console.log(that.markers); 
-			// 	}
-			// });
-			// uni.request({
-			// 	url:base.host+'scene/getAll',
-			// 	success(res){
-			// 		that.scenes=res.data.data;
-			// 		console.log(that.scenes);
-			// 	}
-			// });
-			
+						
 			// 创建音频实例
 			this.innerAudioContext = wx.createInnerAudioContext({
 				useWebAudioImplement: false // 是否使用 WebAudio 作为底层音频驱动，默认关闭。对于短音频、播放频繁的音频建议开启此选项，开启后将获得更优的性能表现。由于开启此选项后也会带来一定的内存增长，因此对于长音频建议关闭此选项
 			})
 			console.log("audio======",this.innerAudioContext);
-		
-			
+					
 		},
 		methods: {
 			//测试
-			update:function(){
-				let that=this;
+			// update:function(){
+			// 	let that=this;
 					
-				uni.getLocation({
-					type: 'gcj02',
-					altitude:'true',
-					isHighAccuracy:"true",
-					accuracy:"best",
-					success: function(res) {
-						console.log("经度：" + res.longitude);
-						console.log("纬度：" + res.latitude);
-						that.latitude = res.latitude;
-						that.longitude = res.longitude;
-							// uni.showModal({
-							// 	title:"经度：" + res.longitude+"纬度：" + res.latitude,
-							// })
-						},false:function(res){
-							uni.showModal({
-								title:"false"
-							})
-						}
-				});
-			},
+			// 	uni.getLocation({
+			// 		type: 'gcj02',
+			// 		altitude:'true',
+			// 		isHighAccuracy:"true",
+			// 		accuracy:"best",
+			// 		success: function(res) {
+			// 			console.log("经度：" + res.longitude);
+			// 			console.log("纬度：" + res.latitude);
+			// 			that.latitude = res.latitude;
+			// 			that.longitude = res.longitude;
+			// 				// uni.showModal({
+			// 				// 	title:"经度：" + res.longitude+"纬度：" + res.latitude,
+			// 				// })
+			// 			},false:function(res){
+			// 				uni.showModal({
+			// 					title:"false"
+			// 				})
+			// 			}
+			// 	});
+			// },
 			
 			//将数据下载，若缓存中有，从缓存中取
 			check :function (){
@@ -231,14 +193,6 @@ import base from '../../utils/base.js'
 				this.innerAudioContext.pause();
 			},
 			
-			
-			// 测试--两点距离
-			// getlocation:function(){
-			// 	uni.showModal({
-			// 		title:"距离为"+this.getDistance(this.markers[0].latitude,this.markers[0].longitude,this.markers[1].latitude,this.markers[1].longitude),
-			// 	})
-			// },
-			
 		}
 	}
 </script>
@@ -258,15 +212,16 @@ import base from '../../utils/base.js'
 	  position: absolute;
 	  bottom: 20px; /* 距离底部的距离 */
 	  right: 20px; /* 距离右侧的距离 */
-	  width: 50px;
-	  height: 50px;
-	  background-color: #007bff;
+	  width: 35px;
+	  height: 35px;
+	  background-color: white;
 	  color: white;
 	  border-radius: 50%; /* 将按钮设置为圆形 */
 	  display: flex;
 	  justify-content: center;
 	  align-items: center;
 	  font-size: 20px;
+	  text-align: center;
 	}
 
 	

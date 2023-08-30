@@ -1,0 +1,12 @@
+
+.content{
+	width: 100%;
+	height: calc(100);
+	align-items: center;
+}
+._h1{
+	margin: 10px 0;
+	text-align: center;
+}
+
+

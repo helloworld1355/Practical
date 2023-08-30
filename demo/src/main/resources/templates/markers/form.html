@@ -6,9 +6,12 @@
     <link th:href="@{/style/node_modules/layui/dist/css/layui.css}" rel="stylesheet">
     <script th:src="@{/style/node_modules/layui/dist/layui.js}" ></script>
     <script th:src="@{/style/node_modules/jquery/dist/jquery.js}"></script>
+    <link href="/kindeditor/themes/default/default.css" rel="stylesheet">
+    <script src="/kindeditor/kindeditor-all-min.js"></script>
+    <script src="/kindeditor/lang/zh-CN.js"></script>
 </head>
 <body style="padding: 20px">
-<form class="layui-form model-form" id="myform">
+<form class="layui-form model-form" id="myform" style="overflow: auto;max-height: 500px">
 <!--    id-->
     <input name="id" type="hidden" th:value="${markers.id}">
 <!--    景点名称-->
@@ -25,13 +28,7 @@
             <input type="text" name="address" th:value="${scene.address}" placeholder="请输入" autocomplete="off" class="layui-input">
         </div>
     </div>
-    <!--    景点内容-->
-    <div class="layui-form-item">
-        <label class="layui-form-label">景点内容</label>
-        <div class="layui-input-block">
-            <input type="text" name="content" th:value="${scene.content}" placeholder="请输入" autocomplete="off" class="layui-input">
-        </div>
-    </div>
+
 
     <!--    景点范围-->
     <div class="layui-form-item">
@@ -72,6 +69,17 @@
         </div>
     </div>
 
+    <!--    景点内容-->
+    <div class="layui-form-item">
+        <label class="layui-form-label">景点内容</label>
+        <div class="layui-input-block">
+            <input id="content"  type="hidden" name="content" th:value="${scene.content}" >
+            <textarea name="editor" id="editor_id" style="width: 700px;height: 500px"></textarea>
+
+        </div>
+    </div>
+
+
     <hr style="margin: 21px 0;">
 <!--    底部按钮-->
     <div style="text-align: center;">
@@ -80,180 +88,204 @@
 
     </div>
 </form>
+
+<script src="/kindeditor/plugins/autoheight/autoheight.js"></script>
     <script>
         var audio;
         var imgPath;
         var Location;
         var latitude;
         var longitude;
-        layui.use(['upload','layer','element','form'],function(){
-            var upload = layui.upload;
-            var layer = layui.layer;
-            var element = layui.element;
-            var form =layui.form;
-            var $ = layui.jquery;
+        var editor;
+        $(function (){
+            //上传内容kindeditor
+            KindEditor.ready(function(K) {
+                console.log("进入kindeditor");
+                editor = K.create('textarea[name="editor"]',{
+                    resizeType: 1,
+                    allowPreviewEmoticons: false,
+                    allowImageUpload: true,
+                    width: '100%',
+                    height: '300px',
+                    uploadJson: '/upload/kindImage',
+                    allowImageRemote: false,
+                    allowFileManager: false,
+                    filePostName: 'file',
+                });
+                editor.html($('#content').val());
+            }); //上传内容kindeditor结束
 
-            // 单图片上传
-            var uploadInst = upload.render({
-                elem: '#ID-upload-demo-btn',
-                url: '/upload/img', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
-                before: function(obj){
-                    // 预读本地文件示例，不支持ie8
-                    obj.preview(function(index, file, result){
-                        $('#ID-upload-demo-img').attr('src', result); // 图片链接（base64）
-                    });
+            layui.use(['upload','layer','element','form'],function(){
+                var upload = layui.upload;
+                var layer = layui.layer;
+                var element = layui.element;
+                var form =layui.form;
+                var $ = layui.jquery;
 
-                    element.progress('filter-demo', '0%'); // 进度条复位
-                    layer.msg('上传中', {icon: 16, time: 0});
-                },
-                done: function(res){
-                    // 若上传失败
-                    if(res.code < 0){
-                        return layer.msg('上传失败');
-                    }
-                    // 上传成功的一些操作
-                    imgPath=res.data;
-                    // …
-                    $('#ID-upload-demo-text').html(''); // 置空上传失败的状态
-                },
-                error: function(){
-                    // 演示失败状态，并实现重传
-                    var demoText = $('#ID-upload-demo-text');
-                    demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
-                    demoText.find('.demo-reload').on('click', function(){
-                        uploadInst.upload();
-                    });
-                },
-                // 进度条
-                progress: function(n, elem, e){
-                    element.progress('filter-demo', n + '%'); // 可配合 layui 进度条元素使用
-                    if(n === 100){
-                        layer.msg('上传完毕', {icon: 1});
-                    }
-                }
-            });
-            //单图片上传结束
+                // 单图片上传
+                var uploadInst = upload.render({
+                    elem: '#ID-upload-demo-btn',
+                    url: '/upload/img', // 此处用的是第三方的 http 请求演示，实际使用时改成您自己的上传接口即可。
+                    before: function(obj){
+                        // 预读本地文件示例，不支持ie8
+                        obj.preview(function(index, file, result){
+                            $('#ID-upload-demo-img').attr('src', result); // 图片链接（base64）
+                        });
 
-            //上传音频
-            upload.render({
-                elem: '.demo-class-accept', // 绑定多个元素
-                url: '/upload/audio', // 此处配置你自己的上传接口即可
-                accept: 'audio', // 音频
-                before:function (){
-                    layer.msg('上传中', {icon: 16, time: 0});
-                },
-                done:function (res){
-                    if(res.code<0){
-                        return layer.msg('上传失败');
-                    }
-                    audio=res.data;
-                    layer.msg('上传成功');
-                    console.log(res);
-                    console.log("done:"+res.data);
-                }
-
-            });
-            //上传音频结束
-
-            //选择位置
-            $('#location').click(function (){
-                layer.open({
-                    type:2,
-                    content: 'https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp',
-                    area:['500px','500px'],
-                    btn:['确定'],
-                    yes:function (index){
-                        if (Location===undefined){
-                            layer.open({
-                                type:0,
-                                title:'提示',
-                                area:'auto',
-                                content:'请点击下方地点！',
-                            })
-                        }else{
-                            console.log(Location);
-                            var element = document.getElementById("location");
-                            element.innerHTML = "已选择中心点";
-                            element.style.color = "red";
-                            layer.close(index);
+                        element.progress('filter-demo', '0%'); // 进度条复位
+                        layer.msg('上传中', {icon: 16, time: 0});
+                    },
+                    done: function(res){
+                        // 若上传失败
+                        if(res.code < 0){
+                            return layer.msg('上传失败');
                         }
+                        // 上传成功的一些操作
+                        imgPath=res.data;
+                        // …
+                        $('#ID-upload-demo-text').html(''); // 置空上传失败的状态
                     },
-                })
-            });
-
-            //选择位置结束
-
-
-
-            //form表单提交
-            var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-            parent.layer.iframeAuto(index);
-            form.on('submit(save)',function (data){
-                console.log("进入表单提交");
-                var field=data.field;
-                var loadIndex = layer.load(2);
-                console.log(JSON.stringify(data.field));
-                $.ajax({
-                    type:'POST',
-                    url:'/markers/submit',
-                    data:{
-                        id:field.id,
-                        title:field.title,
-                        address:field.address,
-                        content:field.content,
-                        radius:field.radius,
-                        audio:audio,
-                        imgPath: imgPath,
-                        latitude:latitude,
-                        longitude:longitude,
+                    error: function(){
+                        // 演示失败状态，并实现重传
+                        var demoText = $('#ID-upload-demo-text');
+                        demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-xs demo-reload">重试</a>');
+                        demoText.find('.demo-reload').on('click', function(){
+                            uploadInst.upload();
+                        });
                     },
-                    dataType:'json',
-                    beforeSend:function (){
-                      console.log("准备开始！");
+                    // 进度条
+                    progress: function(n, elem, e){
+                        element.progress('filter-demo', n + '%'); // 可配合 layui 进度条元素使用
+                        if(n === 100){
+                            layer.msg('上传完毕', {icon: 1});
+                        }
+                    }
+                });
+                //单图片上传结束
+
+
+                //上传音频
+                upload.render({
+                    elem: '.demo-class-accept', // 绑定多个元素
+                    url: '/upload/audio', // 此处配置你自己的上传接口即可
+                    accept: 'audio', // 音频
+                    before:function (){
+                        layer.msg('上传中', {icon: 16, time: 0});
                     },
-                    success:function (res){
-                        layer.close(loadIndex);
-                        if(res.code===0){
-                            $('#search-input',parent.document).click();
-                            parent.layer.msg('refresh');
+                    done:function (res){
+                        if(res.code<0){
+                            return layer.msg('上传失败');
+                        }
+                        audio=res.data;
+                        layer.msg('上传成功');
+                        console.log(res);
+                        console.log("done:"+res.data);
+                    }
+
+                });
+                //上传音频结束
+
+                //选择位置
+                $('#location').click(function (){
+                    layer.open({
+                        type:2,
+                        content: 'https://apis.map.qq.com/tools/locpicker?search=1&type=1&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77&referer=myapp',
+                        area:['500px','500px'],
+                        btn:['确定'],
+                        yes:function (index){
+                            if (Location===undefined){
+                                layer.open({
+                                    type:0,
+                                    title:'提示',
+                                    area:'auto',
+                                    content:'请点击下方地点！',
+                                })
+                            }else{
+                                console.log(Location);
+                                var element = document.getElementById("location");
+                                element.innerHTML = "已选择中心点";
+                                element.style.color = "red";
+                                layer.close(index);
+                            }
+                        },
+                    })
+                });
+
+                //选择位置结束
+
+
+
+                //form表单提交
+                var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                parent.layer.iframeAuto(index);
+                form.on('submit(save)',function (data){
+                    console.log("进入表单提交");
+                    var field=data.field;
+                    var loadIndex = layer.load(2);
+                    var content=editor.html();
+                    console.log(JSON.stringify(data.field));
+                    $.ajax({
+                        type:'POST',
+                        url:'/markers/submit',
+                        data:{
+                            id:field.id,
+                            title:field.title,
+                            address:field.address,
+                            content:content,
+                            radius:field.radius,
+                            audio:audio,
+                            imgPath: imgPath,
+                            latitude:latitude,
+                            longitude:longitude,
+                        },
+                        dataType:'json',
+                        beforeSend:function (){
+                            console.log("准备开始！");
+                        },
+                        success:function (res){
+                            layer.close(loadIndex);
+                            if(res.code===0){
+                                $('#search-input',parent.document).click();
+                                parent.layer.msg('refresh');
+                                parent.layer.close(index);
+                                return false;
+                            }else{
+                                layer.msg(res.msg, {
+                                    icon: 2,
+                                    anim: 6
+                                });
+                            }
+
+                        },
+                        error:function (res){
+                            parent.layer.close(loadingIndex);
+                            var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
+                            parent.layer.iframeAuto(index);
                             parent.layer.close(index);
-                            return false;
-                        }else{
-                            layer.msg(res.msg, {
-                                icon: 2,
-                                anim: 6
-                            });
+                            layer.msg("发生错误："+res);
+                            console.log("发生错误！"+res);
+                        },
+                        complete:function (){
+                            console.log("关闭");
                         }
+                    })
+                });
+                //form表单提交结束
 
-                    },
-                    error:function (res){
-                        parent.layer.close(loadingIndex);
-                        var index = parent.layer.getFrameIndex(window.name);//获取窗口索引
-                        parent.layer.iframeAuto(index);
-                        parent.layer.close(index);
-                        layer.msg("发生错误："+res);
-                        console.log("发生错误！"+res);
-                    },
-                    complete:function (){
-                        console.log("关闭");
-                    }
-                })
+
             });
-            //form表单提交结束
+            window.addEventListener('message', function(event) {
+                // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
+                Location = event.data;
+                latitude=Location.latlng.lat;
+                longitude=Location.latlng.lng;
+                if (Location && Location.module == 'locationPicker') {//防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
+                    console.log('location', Location);
+                    console.log("lat:"+Location.latlng.lat);
+                }
+            }, false);
 
-
-        });
-        window.addEventListener('message', function(event) {
-            // 接收位置信息，用户选择确认位置点后选点组件会触发该事件，回传用户的位置信息
-            Location = event.data;
-            latitude=Location.latlng.lat;
-            longitude=Location.latlng.lng;
-            if (Location && Location.module == 'locationPicker') {//防止其他应用也会向该页面post信息，需判断module是否为'locationPicker'
-                console.log('location', Location);
-                console.log("lat:"+Location.latlng.lat);
-            }
-        }, false);
-
+        })
     </script>
 
 

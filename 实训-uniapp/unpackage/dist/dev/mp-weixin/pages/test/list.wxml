@@ -1,0 +1,1 @@
+<view class="content"><image class="top_image" mode="scaleToFill" src="{{markers[0].iconPath}}"></image><block wx:for="{{markers}}" wx:for-item="item" wx:for-index="index"><view data-event-opts="{{[['tap',[['navigater',[index]]]]]}}" class="article" bindtap="__e"><view class="_h1">{{item.title}}</view><image class="art-image" src="{{item.iconPath}}"></image></view></block></view>

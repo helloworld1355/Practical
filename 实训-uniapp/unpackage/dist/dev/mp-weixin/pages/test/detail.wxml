@@ -1,0 +1,1 @@
+<view class="content"><view class="_h1">{{marker.title}}</view><image src="{{marker.iconPath}}"></image><rich-text style="margin-top:10px;" nodes="{{scene.content}}"></rich-text></view>

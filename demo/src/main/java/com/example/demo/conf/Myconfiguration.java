@@ -22,14 +22,14 @@ public class Myconfiguration implements WebMvcConfigurer {
     @Value("${audio-path}")
     private String audioPath;
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SessionHandlerInterceptor())
-                .addPathPatterns("/user/**")
-                .addPathPatterns("/markers/**")
-                .addPathPatterns("/scenes/**")
-                .excludePathPatterns("/user/login");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(new SessionHandlerInterceptor())
+//                .addPathPatterns("/user/**")
+//                .addPathPatterns("/markers/**")
+//                .addPathPatterns("/scenes/**")
+//                .excludePathPatterns("/user/login");
+//    }
 
     class SessionHandlerInterceptor implements HandlerInterceptor {
         @Override

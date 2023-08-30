@@ -104,8 +104,12 @@
               layer.open({
                   type: 2,
                   area: ['60%','80%'],
-                  resize: true,
-                  shadeClose: true,
+                  shadeClose: false,
+                  scrollbar: true,
+                  maxmin:true,
+                  resize:true,
+                  fixed:true,
+                  anim:'up',
                   title: '编辑',
                   content: '/markers/form?id=' + id,
               })
